@@ -4,7 +4,7 @@ const openai = new OpenAI();
 import { examplePrompt } from "../helpers/data/examplePrompt.js";
 import { summary } from "../helpers/data/summary.js";
 import { Request, Response } from "express";
-
+import Notes from "../models/notes.model.js";
 interface RequestBody {
   body: {
     videoId: string;
@@ -55,9 +55,18 @@ const generateSummary = async (
     });
 
     const finalSummary = completion.choices[0].message.content;
+
+    const newFlux = new Notes({
+      description: finalSummary,
+      videoId: videoId,
+    });
+
+    await newFlux.save();
     res.json({ message: finalSummary });
 
-    console.log("summary", completion.choices[0].message.content);
+     
+
+    //console.log("summary", completion.choices[0].message.content);
   } catch (err) {
     console.error("Failed to generate summary", err);
   }
