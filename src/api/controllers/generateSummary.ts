@@ -1,43 +1,43 @@
-const getSubtitles = require("youtube-captions-scraper").getSubtitles;
-const OpenAI = require("openai");
+import { getSubtitles } from "youtube-captions-scraper";
+import OpenAI from "openai";
 const openai = new OpenAI();
-const {examplePrompt} =require('../helpers/data/examplePrompt')
-const {summary} = require('../helpers/data/summary')   
-// const { Request, Response } = require("express"); 
+import { examplePrompt } from "../helpers/data/examplePrompt.js";
+import { summary } from "../helpers/data/summary.js";
 import { Request, Response } from "express";
 
 interface RequestBody {
-    body:{
-        videoId: string
-    }
+  body: {
+    videoId: string;
+  };
 }
 
-const generateSummary = async (req:RequestBody & Request , res:Response): Promise<void> => {
-
-    try {
+const generateSummary = async (
+  req: RequestBody & Request,
+  res: Response,
+): Promise<void> => {
+  try {
     const videoId = req.body.videoId;
     console.log("videoId", videoId);
     let captionTrack = "";
-  const captions = await getSubtitles({
-    videoID: videoId,
-    lang: "en",
-  });
+    const captions = await getSubtitles({
+      videoID: videoId,
+      lang: "en",
+    });
 
-  // console.log(captions);
+    // console.log(captions);
 
-  interface Caption {
-    text: string;
-  }
+    interface Caption {
+      text: string;
+    }
 
-  captions.forEach((caption: Caption) => {
-    captionTrack += caption.text + " ";
-  });
+    captions.forEach((caption: Caption) => {
+      captionTrack += caption.text + " ";
+    });
 
-  const shorterCaptionTrack: String = captionTrack
-    .split(" ")
-    .slice(0, 3000)
-    .join(" ");
-
+    const shorterCaptionTrack: String = captionTrack
+      .split(" ")
+      .slice(0, 3000)
+      .join(" ");
 
     const completion = await openai.chat.completions.create({
       messages: [
@@ -55,14 +55,12 @@ const generateSummary = async (req:RequestBody & Request , res:Response): Promis
     });
 
     const finalSummary = completion.choices[0].message.content;
-    res.json({message: finalSummary} )
+    res.json({ message: finalSummary });
 
     console.log("summary", completion.choices[0].message.content);
   } catch (err) {
     console.error("Failed to generate summary", err);
   }
+};
 
-
-}
-
-module.exports= generateSummary;
+export default generateSummary;

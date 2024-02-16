@@ -1,11 +1,10 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose";
 
-const databaseConnection = (url:string) => {
-    mongoose.connect(url)
-    .then(() => console.log("Database connected successfully"))
+const databaseConnection = (url: string) => {
+  mongoose
+    .connect(url)
+    .then(() => console.log("Database connected successfully!!"))
     .catch((error: any) => console.error("Database connection error:", error));
-}
+};
 
-export {};
-
-module.exports = { databaseConnection };
+export default databaseConnection;
