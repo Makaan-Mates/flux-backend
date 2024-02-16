@@ -5,6 +5,7 @@ import { examplePrompt } from "../helpers/data/examplePrompt.js";
 import { summary } from "../helpers/data/summary.js";
 import { Request, Response } from "express";
 import Notes from "../models/notes.model.js";
+
 interface RequestBody {
   body: {
     videoId: string;
@@ -44,7 +45,7 @@ const generateSummary = async (
         {
           role: "system",
           content:
-            "You are a helpful assistant that summarizes youtube video transcripts and provide meaningful notes.",
+            "You are a helpful assistant that summarizes youtube video transcripts and provide meaningful notes in bullet points, also give a title for each notes.",
         },
         { role: "user", content: `${examplePrompt}` },
         { role: "assistant", content: `${summary}` },
