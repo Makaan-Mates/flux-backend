@@ -45,7 +45,7 @@ const generateSummary = async (
         {
           role: "system",
           content:
-            "You are a helpful assistant that summarizes youtube video transcripts and provide meaningful notes in bullet points, also give a title for each notes.",
+            "You are a helpful assistant that summarizes youtube video transcripts and provide meaningful notes in bullet points, also give each notes in the format of a title and a description. Be little creative while making notes, make sure the reader enjoys and understands them well and give bullet points for each notes, and don't use the word transcript in the notes instead use videos for referring to the content.",
         },
         { role: "user", content: `${examplePrompt}` },
         { role: "assistant", content: `${summary}` },
@@ -64,8 +64,6 @@ const generateSummary = async (
 
     await newFlux.save();
     res.json({ message: finalSummary });
-
-     
 
     //console.log("summary", completion.choices[0].message.content);
   } catch (err) {
