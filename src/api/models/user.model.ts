@@ -9,6 +9,12 @@ const user = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Notes",
   },
+  bookmarks: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Notes",
+    },
+  ],
 });
 
 const User = mongoose.model("User", user);
