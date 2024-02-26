@@ -1,3 +1,4 @@
+// @ts-ignore
 import { getSubtitles } from "youtube-captions-scraper";
 import OpenAI from "openai";
 const openai = new OpenAI();
@@ -5,7 +6,7 @@ import { examplePrompt } from "../helpers/data/examplePrompt.js";
 import { summary } from "../helpers/data/summary.js";
 import { Request, Response } from "express";
 import Notes from "../models/notes.model.js";
-
+import User from "../models/user.model.js";
 interface RequestBody {
   body: {
     videoId: string;
@@ -19,6 +20,12 @@ const generateSummary = async (
   try {
     const videoId = req.body.videoId;
     console.log("videoId", videoId);
+
+    const email = req.body.email;
+    const user = await User.findOne({ email: email });
+
+    console.log("userId", user);
+
     let captionTrack = "";
     const captions = await getSubtitles({
       videoID: videoId,
@@ -35,6 +42,8 @@ const generateSummary = async (
       captionTrack += caption.text + " ";
     });
 
+    console.log(captionTrack.split(" ").length);
+
     const shorterCaptionTrack: String = captionTrack
       .split(" ")
       .slice(0, 3000)
@@ -45,14 +54,13 @@ const generateSummary = async (
         {
           role: "system",
           content:
-            "You are a helpful assistant that summarizes youtube video transcripts and provide meaningful notes in bullet points, also give each notes in the format of a title and a description. Be little creative while making notes, make sure the reader enjoys and understands them well and give bullet points for each notes, and don't use the word transcript in the notes instead use videos for referring to the content.",
+            "You are a helpful assistant that summarizes youtube video transcripts and provide meaningful notes in bullet points, also give each notes in the format of a title and a description. Be little creative while making notes, make sure the reader enjoys and understands them well and give bullet points for each notes, and don't use the word transcript in the notes instead use videos for referring to the content. Also, make sure the notes are detailed and long and not too short.",
         },
         { role: "user", content: `${examplePrompt}` },
         { role: "assistant", content: `${summary}` },
         { role: "user", content: `${shorterCaptionTrack}` },
       ],
       model: "gpt-3.5-turbo",
-      // model: 'gpt-4',
     });
 
     const finalSummary = completion.choices[0].message.content;
@@ -60,12 +68,11 @@ const generateSummary = async (
     const newFlux = new Notes({
       description: finalSummary,
       videoId: videoId,
+      authorId: user?._id,
     });
 
     await newFlux.save();
     res.json({ message: finalSummary });
-
-    //console.log("summary", completion.choices[0].message.content);
   } catch (err) {
     console.error("Failed to generate summary", err);
   }
