@@ -10,6 +10,7 @@ export const getFluxDetail = async (req: Request, res: Response) => {
       videoId: videoId,
       authorId: author?._id,
     });
+    console.log("fluxDetail", fluxDetail);
     res.status(200).json({
       message: fluxDetail,
     });

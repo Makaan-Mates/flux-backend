@@ -7,6 +7,9 @@ import { summary } from "../helpers/data/summary.js";
 import { Request, Response } from "express";
 import Notes from "../models/notes.model.js";
 import User from "../models/user.model.js";
+// @ts-ignore
+import getYoutubeTitle from "get-youtube-title";
+
 interface RequestBody {
   body: {
     videoId: string;
@@ -15,7 +18,7 @@ interface RequestBody {
 
 const generateSummary = async (
   req: RequestBody & Request,
-  res: Response,
+  res: Response
 ): Promise<void> => {
   try {
     const videoId = req.body.videoId;
@@ -24,7 +27,28 @@ const generateSummary = async (
     const email = req.body.email;
     const user = await User.findOne({ email: email });
 
-    console.log("userId", user);
+    // console.log("userId", user);
+
+    const notesExist = await Notes.findOne({
+      videoId: videoId,
+      authorId: user?._id,
+    });
+    if (notesExist) {
+      res.json({ message: notesExist });
+      return;
+    }
+
+    const title = await new Promise((resolve, reject) => {
+      getYoutubeTitle(videoId.toString(), (err: any, title: string) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(title);
+        }
+      });
+    });
+
+
 
     let captionTrack = "";
     const captions = await getSubtitles({
@@ -54,7 +78,7 @@ const generateSummary = async (
         {
           role: "system",
           content:
-            "You are a helpful assistant that summarizes youtube video transcripts and provide meaningful notes in bullet points, also give each notes in the format of a title and a description. Be little creative while making notes, make sure the reader enjoys and understands them well and give bullet points for each notes, and don't use the word transcript in the notes instead use videos for referring to the content. Also, make sure the notes are detailed and long and not too short.",
+            "You are a helpful assistant that summarizes youtube video transcripts and provide meaningful notes in bullet points. Be little creative while making notes, make sure the reader enjoys and understands them well and give bullet points for each notes that are descriptive, and don't use the word transcript in the notes instead use videos for referring to the content. Also, make sure the notes are detailed and long and not too short.",
         },
         { role: "user", content: `${examplePrompt}` },
         { role: "assistant", content: `${summary}` },
@@ -66,6 +90,7 @@ const generateSummary = async (
     const finalSummary = completion.choices[0].message.content;
 
     const newFlux = new Notes({
+      title: title,
       description: finalSummary,
       videoId: videoId,
       authorId: user?._id,
