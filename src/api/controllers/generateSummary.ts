@@ -7,8 +7,10 @@ import { summary } from "../helpers/data/summary.js";
 import { Request, Response } from "express";
 import Notes from "../models/notes.model.js";
 import User from "../models/user.model.js";
-// @ts-ignore
-import getYoutubeTitle from "get-youtube-title";
+import { config } from "dotenv";
+config();
+import axios from "axios";
+const apiKey = process.env.YOUTUBE_API_KEY;
 
 interface RequestBody {
   body: {
@@ -27,8 +29,6 @@ const generateSummary = async (
     const email = req.body.email;
     const user = await User.findOne({ email: email });
 
-    // console.log("userId", user);
-
     const notesExist = await Notes.findOne({
       videoId: videoId,
       authorId: user?._id,
@@ -38,17 +38,17 @@ const generateSummary = async (
       return;
     }
 
-    const title = await new Promise((resolve, reject) => {
-      getYoutubeTitle(videoId.toString(), (err: any, title: string) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(title);
-        }
+    const title = await axios
+      .get(
+        `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=${apiKey}`
+      )
+      .then((response) => {
+        const title = response.data.items[0].snippet.title;
+        return title;
+      })
+      .catch((error) => {
+        console.error("Error fetching video title:", error);
       });
-    });
-
-
 
     let captionTrack = "";
     const captions = await getSubtitles({

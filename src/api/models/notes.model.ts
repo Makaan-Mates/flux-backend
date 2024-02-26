@@ -9,6 +9,10 @@ const notes = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  bookmarked: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Notes = mongoose.model("Notes", notes);
