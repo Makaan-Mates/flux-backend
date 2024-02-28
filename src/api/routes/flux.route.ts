@@ -5,9 +5,12 @@ import { getFluxDetail } from "../controllers/getFluxDetail.js";
 import { bookmarkFlux } from "../controllers/bookmarkFlux.js";
 import { getUserNotes } from "../controllers/getUserNotes.js";
 import { getBookmarkStatus } from "../controllers/getBookmarkStatus.js";
+import { deleteBookMarkedNote } from "../controllers/deleteBookMarkedNote.js";
+
 router.post("/createflux", generateSummary);
 router.get("/getfluxdetail", getFluxDetail);
 router.post("/bookmarkflux", bookmarkFlux);
+router.delete("/deleteBookMarkedNote/:id", deleteBookMarkedNote);
 router.get("/getUserNotes", getUserNotes);
 router.get("/bookmarkstatus", getBookmarkStatus);
 
