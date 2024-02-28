@@ -9,8 +9,8 @@ config();
 app.use(express.json());
 app.use(cors());
 
-console.log(process.env.URL);
-
+// console.log(process.env.URL);
+//@ts-ignore
 databaseConnection(process.env.URL);
 
 app.use("/api", createFluxRouter);
