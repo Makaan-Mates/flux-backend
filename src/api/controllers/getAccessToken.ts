@@ -37,6 +37,8 @@ export const getAccessToken = async (req: Request, res: Response) => {
         console.log(jsonResponse);
         const user = await User.findOne({ email: email });
         if (user) {
+          //@ts-ignore
+
           user.notionAccessToken = jsonResponse.access_token;
           await user.save();
         }

@@ -13,8 +13,9 @@ export const fetchNotionPages = async (req: Request, res: Response) => {
       filter: { property: "object", value: "page" },
       page_size: 100,
     });
-
     const filteredResponse = response.results.filter(
+      //@ts-ignore
+
       (page) => page.parent.type === "workspace",
     );
 
@@ -25,6 +26,8 @@ export const fetchNotionPages = async (req: Request, res: Response) => {
   } catch (err) {
     res.status(400).json({
       message: "Failed to fetch Notion pages",
+      //@ts-ignore
+
       error: err.message,
     });
   }
