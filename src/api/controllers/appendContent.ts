@@ -31,6 +31,8 @@ export const appendContent = async (req: Request, res: Response) => {
   try {
     const response = await notion.blocks.children.append({
       block_id: pageId,
+      //@ts-ignore
+
       children: contentBlocks,
     });
 
@@ -42,6 +44,8 @@ export const appendContent = async (req: Request, res: Response) => {
     console.error("Failed to add content to page:", error);
     res.status(500).json({
       message: "Failed to add content to page",
+      //@ts-ignore
+
       error: error.message,
     });
   }

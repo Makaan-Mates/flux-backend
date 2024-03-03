@@ -9,8 +9,6 @@ import { getAccessToken } from "../controllers/getAccessToken.js";
 import { createNotionPage } from "../controllers/createNotionPage.js";
 import { appendContent } from "../controllers/appendContent.js";
 import { fetchNotionPages } from "../controllers/fetchNotionPages.js";
-import { submitNotionPageId } from "../controllers/submitNotionPageId.js";
-import { deleteBookMarkedNote } from "../controllers/deleteBookMarkedNote.js";
 import { rateLimitMiddleware } from "../middlewares/rateLimitMiddleware.js";
 
 router.post("/createflux", rateLimitMiddleware, generateSummary);
@@ -23,5 +21,4 @@ router.post("/accesstoken", getAccessToken);
 router.post("/create/notionpage", createNotionPage);
 router.post("/appendcontent", appendContent);
 router.post("/fetchpages", fetchNotionPages);
-router.post("/submitpageid", submitNotionPageId);
 export default router;
