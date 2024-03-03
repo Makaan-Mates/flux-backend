@@ -5,6 +5,8 @@ const user = new Schema({
   name: String,
   email: String,
   photoUrl: String,
+  customOpenAIkey: String,
+  customGPTModel: String,
   history: {
     type: Schema.Types.ObjectId,
     ref: "Notes",

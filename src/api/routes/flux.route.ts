@@ -10,9 +10,13 @@ import { createNotionPage } from "../controllers/createNotionPage.js";
 import { appendContent } from "../controllers/appendContent.js";
 import { fetchNotionPages } from "../controllers/fetchNotionPages.js";
 import { submitNotionPageId } from "../controllers/submitNotionPageId.js";
-router.post("/createflux", generateSummary);
+import { deleteBookMarkedNote } from "../controllers/deleteBookMarkedNote.js";
+import { rateLimitMiddleware } from "../middlewares/rateLimitMiddleware.js";
+
+router.post("/createflux", rateLimitMiddleware, generateSummary);
 router.get("/getfluxdetail", getFluxDetail);
 router.post("/bookmarkflux", bookmarkFlux);
+router.delete("/deleteBookMarkedNote/:id", deleteBookMarkedNote);
 router.get("/getUserNotes", getUserNotes);
 router.get("/bookmarkstatus", getBookmarkStatus);
 router.post("/accesstoken", getAccessToken);

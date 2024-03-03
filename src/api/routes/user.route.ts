@@ -1,7 +1,13 @@
 import express from "express";
-import { createUser } from "../controllers/createUser.js";
 const router = express.Router();
+import { createUser } from "../controllers/createUser.js";
+import {
+  saveCustomOpenAIKey,
+  deleteCustomOpenAIKey,
+} from "../controllers/customOpenAIKey.js";
 
 router.post("/create", createUser);
+router.post("/savecustomopenaikey", saveCustomOpenAIKey);
+router.post("/deletecustomopenaikey", deleteCustomOpenAIKey);
 
 export default router;
