@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import generateSummary from "../controllers/generateSummary.js";
 import { getFluxDetail } from "../controllers/getFluxDetail.js";
-import { bookmarkFlux } from "../controllers/bookmarkFlux.js";
+import { bookmarkFlux,deleteBookMarkedNote } from "../controllers/bookmarkFlux.js";
 import { getUserNotes } from "../controllers/getUserNotes.js";
 import { getBookmarkStatus } from "../controllers/getBookmarkStatus.js";
 import { getAccessToken } from "../controllers/getAccessToken.js";
