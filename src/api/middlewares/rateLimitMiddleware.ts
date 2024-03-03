@@ -12,9 +12,9 @@ mongoConn.connect().then(() => {
 });
 
 const rateLimiter = new RateLimiterMongo({
-  storeClient: mongoConn.db("users"),
+  storeClient: mongoConn.db("videos"),
   points: 3,
-  duration: 60 * 10, // 1 week
+  duration: 60 * 20, // 1 week
   keyPrefix: "rateLimiter", // Prefix for collection names
 });
 
@@ -30,18 +30,47 @@ export const rateLimitMiddleware = async (
 
   const user = await User.findOne({ email: email });
   if (user && user.customOpenAIkey) {
+    res.set("X-RateLimit-Limit", "Unlimited");
     next();
   } else {
     try {
-      await rateLimiter.consume(email);
+      const rateLimiterRes = await rateLimiter.consume(email);
+      // Include rate limit info in the response headers
+      res.set("X-RateLimit-Limit", rateLimiter.points.toString());
+      res.set(
+        "X-RateLimit-Remaining",
+        rateLimiterRes.remainingPoints.toString()
+      );
+      res.set(
+        "X-RateLimit-Reset",
+        new Date(rateLimiterRes.msBeforeNext).toISOString()
+      );
       next();
-    } catch (rejRes) {
-      res
-        .status(429)
-        .json({
-          message:
-            "Public API limit reached! Retry later or add your custom API for seamless flux.",
-        });
+    } catch (error) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "msBeforeNext" in error
+      ) {
+        const rejRes = error as {
+          msBeforeNext: number;
+          remainingPoints: number;
+        };
+        res
+          .status(429)
+          .set({
+            "X-RateLimit-Limit": rateLimiter.points.toString(),
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": new Date(rejRes.msBeforeNext).toISOString(),
+          })
+          .json({
+            message:
+              "Public API limit reached! Retry later or add your custom API for seamless flux.",
+          });
+      } else {
+        // Handle unexpected error structure
+        res.status(500).json({ message: "An unexpected error occurred." });
+      }
     }
   }
 };
