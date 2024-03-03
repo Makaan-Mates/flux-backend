@@ -82,9 +82,24 @@ const generateSummary = async (
 
     console.log(captionTrack.split(" ").length);
 
+    let gptModel = "gpt-3.5-turbo";
+    const gptModelWordLimits: { [key: string]: number } = {
+      "gpt-3.5-turbo": 3000,
+      "gpt-4": 6500,
+    };
+
+    if (user.customGPTModel) {
+      gptModel = user.customGPTModel;
+      console.log("customModel", gptModel);
+    }
+    console.log("gptModel", gptModel);
+
+    const maxWords = gptModelWordLimits[gptModel] || 3000;
+    console.log(maxWords);
+
     const shorterCaptionTrack: String = captionTrack
       .split(" ")
-      .slice(0, 3000)
+      .slice(0, maxWords)
       .join(" ");
 
     let openaiApiKey = process.env.OPENAI_API_KEY;
@@ -92,13 +107,15 @@ const generateSummary = async (
     if (user.customOpenAIkey) {
       const decryptedOpenAIKey = decryptKey(user.customOpenAIkey);
       openaiApiKey = decryptedOpenAIKey;
+      console.log("customOpenaiApiKey");
     }
+    console.log("openaiApiKey");
 
     const openai = new OpenAI({
       apiKey: openaiApiKey,
     });
 
-    console.log("openai", openai);
+    // console.log("openai", openai);
 
     const completion = await openai.chat.completions.create({
       messages: [
@@ -111,7 +128,7 @@ const generateSummary = async (
         { role: "assistant", content: `${summary}` },
         { role: "user", content: `${shorterCaptionTrack}` },
       ],
-      model: "gpt-3.5-turbo",
+      model: `${gptModel}`,
     });
 
     const finalSummary = completion.choices[0].message.content;
@@ -127,7 +144,7 @@ const generateSummary = async (
     res.json({ message: finalSummary });
     // console.log(finalSummary?.toString())
   } catch (err) {
-    console.error("Failed to generate summary", err);
+    console.error("Failed to generate flux.", err);
     res.status(201).json({ message: err });
   }
 };

@@ -6,8 +6,9 @@ import { bookmarkFlux } from "../controllers/bookmarkFlux.js";
 import { getUserNotes } from "../controllers/getUserNotes.js";
 import { getBookmarkStatus } from "../controllers/getBookmarkStatus.js";
 import { deleteBookMarkedNote } from "../controllers/deleteBookMarkedNote.js";
+import { rateLimitMiddleware } from "../middlewares/rateLimitMiddleware.js";
 
-router.post("/createflux", generateSummary);
+router.post("/createflux", rateLimitMiddleware, generateSummary);
 router.get("/getfluxdetail", getFluxDetail);
 router.post("/bookmarkflux", bookmarkFlux);
 router.delete("/deleteBookMarkedNote/:id", deleteBookMarkedNote);
