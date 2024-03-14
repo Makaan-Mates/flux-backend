@@ -9,24 +9,25 @@ export const appendContent = async (req: Request, res: Response) => {
   });
 
   const pageId = req.body.page_id;
-  console.log("pageId: " + pageId);
-  const content = req.body.content;
-  const contentBlocks = [
-    {
-      object: "block",
-      type: "paragraph",
-      paragraph: {
-        rich_text: [
-          {
-            type: "text",
-            text: {
-              content: content,
-            },
-          },
-        ],
-      },
-    },
-  ];
+  const contentBlocks = req.body.content;
+  // console.log("pageId: " + pageId);
+  // const content = req.body.content;
+  // const contentBlocks = [
+  //   {
+  //     object: "block",
+  //     type: "paragraph",
+  //     paragraph: {
+  //       rich_text: [
+  //         {
+  //           type: "text",
+  //           text: {
+  //             content: content,
+  //           },
+  //         },
+  //       ],
+  //     },
+  //   },
+  // ];
 
   try {
     const response = await notion.blocks.children.append({
