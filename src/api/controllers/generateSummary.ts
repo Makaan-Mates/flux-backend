@@ -79,7 +79,7 @@ const generateSummary = async (
     captions.forEach((caption: Caption) => {
       captionTrack += caption.text + " ";
     });
-
+    console.log("captionTrack", captionTrack);
     console.log(captionTrack.split(" ").length);
 
     let gptModel = "gpt-3.5-turbo";
@@ -122,7 +122,7 @@ const generateSummary = async (
         {
           role: "system",
           content:
-            "You are a helpful assistant that summarizes youtube video transcripts and provide meaningful notes in bullet points. Be little creative while making notes, make sure the reader enjoys and understands them well and give bullet points for each notes that are descriptive, and don't use the word transcript in the notes instead use videos for referring to the content. Also, make sure the notes are detailed and long and not too short.",
+            "You are a helpful assistant that summarizes coding YouTube videos. Your task is to extract key concepts, explain them clearly, and provide relevant code examples in markdown format. Be creative and ensure the notes are engaging, detailed, and include bullet points for clarity. Avoid using the word 'transcript' and refer to the content as 'video'. Emphasize code examples by presenting them in code blocks to enhance readability and practical understanding.",
         },
         { role: "user", content: `${examplePrompt}` },
         { role: "assistant", content: `${summary}` },
@@ -132,6 +132,7 @@ const generateSummary = async (
     });
 
     const finalSummary = completion.choices[0].message.content;
+    // console.log("finalSummary", finalSummary);
 
     const newFlux = new Notes({
       title: title,

@@ -8,10 +8,8 @@ export const getAccessToken = async (req: Request, res: Response) => {
     const clientId = process.env.OAUTH_CLIENT_ID;
     const clientSecret = process.env.OAUTH_CLIENT_SECRET;
     const encoded = Buffer.from(`${clientId}:${clientSecret}`).toString(
-      "base64",
+      "base64"
     );
-    const email = req.body.email;
-    console.log("email" + email);
 
     console.log("clientId: " + clientId);
     console.log("clientSecret: " + clientSecret);
@@ -34,14 +32,8 @@ export const getAccessToken = async (req: Request, res: Response) => {
           }),
         });
         const jsonResponse = await response.json();
-        console.log(jsonResponse);
-        const user = await User.findOne({ email: email });
-        if (user) {
-          //@ts-ignore
+        // console.log("jsonResponse",jsonResponse);
 
-          user.notionAccessToken = jsonResponse.access_token;
-          await user.save();
-        }
         res.status(200).json({
           message: jsonResponse,
         });
@@ -49,6 +41,6 @@ export const getAccessToken = async (req: Request, res: Response) => {
     };
     exchangeAccessToken();
   } catch (err) {
-    console.log(err);
+    console.log("getaccessToken", err);
   }
 };
