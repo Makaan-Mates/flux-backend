@@ -3,7 +3,7 @@ import { Client } from "@notionhq/client";
 
 export const fetchNotionPages = async (req: Request, res: Response) => {
   const access_token = req.body.access_token;
-  console.log(access_token);
+  console.log("access_token", access_token);
   const notion = new Client({
     auth: access_token,
   });
@@ -16,7 +16,7 @@ export const fetchNotionPages = async (req: Request, res: Response) => {
     const filteredResponse = response.results.filter(
       //@ts-ignore
 
-      (page) => page.parent.type === "workspace",
+      (page) => page.parent.type === "workspace"
     );
 
     res.status(200).json({

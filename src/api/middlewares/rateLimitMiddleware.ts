@@ -13,8 +13,8 @@ mongoConn.connect().then(() => {
 
 const rateLimiter = new RateLimiterMongo({
   storeClient: mongoConn.db("videos"),
-  points: 15,
-  duration: 60 * 20, // 1 week
+  points: 5,
+  duration: 60 * 10, // 1 week
   keyPrefix: "rateLimiter", // Prefix for collection names
 });
 

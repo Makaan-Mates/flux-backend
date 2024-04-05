@@ -3,7 +3,6 @@ import { Client } from "@notionhq/client";
 
 export const createNotionPage = async (req: Request, res: Response) => {
   const access_token = req.body.access_token;
-  console.log(access_token);
   const notion = new Client({
     auth: access_token,
   });
@@ -34,7 +33,6 @@ export const createNotionPage = async (req: Request, res: Response) => {
     },
   });
 
-  console.log(response.id);
 
   res.status(200).json({
     message: "Page created successfully",
