@@ -10,6 +10,11 @@ export const getAccessToken = async (req: Request, res: Response) => {
     const encoded = Buffer.from(`${clientId}:${clientSecret}`).toString(
       "base64"
     );
+    // Determine the redirect URI based on the environment
+    const redirectUri =
+      process.env.NODE_ENV === "production"
+        ? process.env.REDIRECT_URI_PROD
+        : process.env.REDIRECT_URI_DEV;
 
     const exchangeAccessToken = async () => {
       if (code) {
@@ -24,7 +29,7 @@ export const getAccessToken = async (req: Request, res: Response) => {
           body: JSON.stringify({
             grant_type: "authorization_code",
             code: code,
-            redirect_uri: "http://localhost:5173/dashboard",
+            redirect_uri: redirectUri,
           }),
         });
         const jsonResponse = await response.json();
