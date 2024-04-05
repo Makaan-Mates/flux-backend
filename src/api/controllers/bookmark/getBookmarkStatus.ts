@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import User from "../models/user.model.js";
-import Notes from "../models/notes.model.js";
+import User from "../../models/user.model.js";
+import Notes from "../../models/notes.model.js";
 export const getBookmarkStatus = async (req: Request, res: Response) => {
   try {
     const videoId = req.query.videoId;

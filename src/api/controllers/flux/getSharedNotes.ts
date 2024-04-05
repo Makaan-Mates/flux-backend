@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Notes from "../models/notes.model.js";
+import Notes from "../../models/notes.model.js";
 
 export const getSharedNotes = async (req: Request, res: Response) => {
   const noteId = req.params.noteId;

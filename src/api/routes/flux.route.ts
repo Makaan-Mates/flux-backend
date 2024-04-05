@@ -1,19 +1,19 @@
 import express from "express";
 const router = express.Router();
-import generateSummary from "../controllers/generateSummary.js";
-import { getFluxDetail } from "../controllers/getFluxDetail.js";
+import generateSummary from "../controllers/summary/generateSummary.js";
+import { getFluxDetail } from "../controllers/flux/getFluxDetail.js";
 import {
   bookmarkFlux,
   deleteBookMarkedNote,
-} from "../controllers/bookmarkFlux.js";
-import { getUserNotes } from "../controllers/getUserNotes.js";
-import { getBookmarkStatus } from "../controllers/getBookmarkStatus.js";
-import { getAccessToken } from "../controllers/getAccessToken.js";
-import { createNotionPage } from "../controllers/createNotionPage.js";
-import { appendContent } from "../controllers/appendContent.js";
-import { fetchNotionPages } from "../controllers/fetchNotionPages.js";
+} from "../controllers/bookmark/bookmarkFlux.js";
+import { getUserNotes } from "../controllers/users/getUserNotes.js";
+import { getBookmarkStatus } from "../controllers/bookmark/getBookmarkStatus.js";
+import { getAccessToken } from "../controllers/notion/getAccessToken.js";
+import { createNotionPage } from "../controllers/notion/createNotionPage.js";
+import { appendContent } from "../controllers/notion/appendContent.js";
+import { fetchNotionPages } from "../controllers/notion/fetchNotionPages.js";
 import { rateLimitMiddleware } from "../middlewares/rateLimitMiddleware.js";
-import { getSharedNotes } from "../controllers/getSharedNotes.js";
+import { getSharedNotes } from "../controllers/flux/getSharedNotes.js";
 
 router.post("/createflux", rateLimitMiddleware, generateSummary);
 router.get("/getfluxdetail", getFluxDetail);

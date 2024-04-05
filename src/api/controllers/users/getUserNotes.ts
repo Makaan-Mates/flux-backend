@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import Notes from "../models/notes.model.js";
-import User from "../models/user.model.js";
+import Notes from "../../models/notes.model.js";
+import User from "../../models/user.model.js";
 export const getUserNotes = async (req: Request, res: Response) => {
   const email = req.query.email;
   const author = await User.findOne({ email: email });
