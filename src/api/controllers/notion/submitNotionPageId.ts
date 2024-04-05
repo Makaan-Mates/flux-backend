@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../models/user.model.js";
+import User from "../../models/user.model.js";
 
 export const submitNotionPageId = async (req: Request, res: Response) => {
   const pageId = req.body.page_id;

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../models/user.model.js";
+import User from "../../models/user.model.js";
 import CryptoJS from "crypto-js";
 import OpenAI from "openai";
 

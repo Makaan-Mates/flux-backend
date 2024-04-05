@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { config } from "dotenv";
-import User from "../models/user.model.js";
 config();
 export const getAccessToken = async (req: Request, res: Response) => {
   try {

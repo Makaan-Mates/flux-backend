@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import Notes from "../models/notes.model.js";
-import User from "../models/user.model.js";
+import Notes from "../../models/notes.model.js";
+import User from "../../models/user.model.js";
 export const getFluxDetail = async (req: Request, res: Response) => {
   const videoId = req.query.videoId;
   const email = req.query.email;

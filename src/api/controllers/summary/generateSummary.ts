@@ -1,11 +1,11 @@
 // @ts-ignore
 import { getSubtitles } from "youtube-captions-scraper";
 import OpenAI from "openai";
-import { examplePrompt } from "../helpers/data/examplePrompt.js";
-import { summary } from "../helpers/data/summary.js";
+import { examplePrompt } from "../../helpers/data/examplePrompt.js";
+import { summary } from "../../helpers/data/summary.js";
 import { Request, Response } from "express";
-import Notes from "../models/notes.model.js";
-import User from "../models/user.model.js";
+import Notes from "../../models/notes.model.js";
+import User from "../../models/user.model.js";
 import dotenv from "dotenv";
 dotenv.config();
 import axios from "axios";
