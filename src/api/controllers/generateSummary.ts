@@ -79,8 +79,6 @@ const generateSummary = async (
     captions.forEach((caption: Caption) => {
       captionTrack += caption.text + " ";
     });
-    console.log("captionTrack", captionTrack);
-    console.log(captionTrack.split(" ").length);
 
     let gptModel = "gpt-3.5-turbo";
     const gptModelWordLimits: { [key: string]: number } = {
@@ -107,9 +105,7 @@ const generateSummary = async (
     if (user.customOpenAIkey) {
       const decryptedOpenAIKey = decryptKey(user.customOpenAIkey);
       openaiApiKey = decryptedOpenAIKey;
-      console.log("customOpenaiApiKey");
     }
-    console.log("openaiApiKey");
 
     const openai = new OpenAI({
       apiKey: openaiApiKey,

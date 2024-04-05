@@ -11,10 +11,6 @@ export const getAccessToken = async (req: Request, res: Response) => {
       "base64"
     );
 
-    console.log("clientId: " + clientId);
-    console.log("clientSecret: " + clientSecret);
-    console.log("encoded: " + encoded);
-
     const exchangeAccessToken = async () => {
       if (code) {
         console.log(code);

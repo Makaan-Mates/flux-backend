@@ -3,7 +3,6 @@ import { Client } from "@notionhq/client";
 
 export const appendContent = async (req: Request, res: Response) => {
   const access_token = req.body.access_token;
-  console.log(access_token);
   const notion = new Client({
     auth: access_token,
   });

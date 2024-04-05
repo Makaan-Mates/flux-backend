@@ -3,7 +3,7 @@ import Notes from "../models/notes.model.js";
 
 export const getSharedNotes = async (req: Request, res: Response) => {
   const noteId = req.params.noteId;
-  console.log(noteId);
+  // console.log(noteId);
   const note = await Notes.findOne({ _id: noteId });
   if (note) {
     res.json({ message: note });
