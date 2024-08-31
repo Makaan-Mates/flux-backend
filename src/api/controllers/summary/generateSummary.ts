@@ -31,7 +31,7 @@ const decryptKey = (encryptedKey: string): string => {
 
 const generateSummary = async (
   req: RequestBody & Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const videoId = req.body.videoId;
@@ -54,7 +54,7 @@ const generateSummary = async (
 
     const title = await axios
       .get(
-        `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=${YT_apiKey}`
+        `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=${YT_apiKey}`,
       )
       .then((response) => {
         const title = response.data.items[0].snippet.title;
@@ -80,10 +80,10 @@ const generateSummary = async (
       captionTrack += caption.text + " ";
     });
 
-    let gptModel = "gpt-3.5-turbo";
+    let gptModel = "gpt-4o-mini";
     const gptModelWordLimits: { [key: string]: number } = {
-      "gpt-3.5-turbo": 3000,
-      "gpt-4": 6500,
+      "gpt-4o-mini": 3000,
+      "gpt-4o-mini-2024-07-18": 6500,
     };
 
     if (user.customGPTModel) {
